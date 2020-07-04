@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<!-- <configuration debug="true" scan="true" scanPeriod="1 seconds"> -->
+<configuration debug="true">
+
+    <!-- 변수 지정 -->
+    <property name="LOG_DIR" value="./logs" />
+    <property name="LOG_PATH_NAME" value="${LOG_DIR}/data.log" />
+    <property name="DRIVER_CLASS_NAME" value="com.mysql.cj.jdbc.Driver" />
+    <property name="URL" value="jdbc:mysql://hyeonsondb.c6tuwjcsobwr.ap-northeast-2.rds.amazonaws.com:3306/ssgsag_log?useSSL=false&amp;serverTimezone-UTC" />
+    <property name="USER_NAME" value="hyeonson" />
+    <property name="PASSWORD" value="$Kkhs95784512" />
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!--
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>info</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %logger.%method\(%line\) === %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--
+    <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>warn</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/data.%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+            <maxHistory>1</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%d{yyyy:MM:dd HH:mm:ss.SSS} %-5level - [%thread] %logger{35} : %msg %n</pattern>
+        </encoder>
+    </appender>
+    -->
+    <appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
+        <!--
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>warn</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        -->
+        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+            <driverClass>${DRIVER_CLASS_NAME}</driverClass>
+            <url>${URL}</url>
+            <user>${USER_NAME}</user>
+            <password>${PASSWORD}</password>
+        </connectionSource>
+    </appender>
+    <!--
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+		Queue의 크기중에 비어있는 부분이 discardingThreshold 비율 이하인 경우 INFO 레벨 이하의 로그는 저장하지 않는다.
+		모든 로그 이벤트를 처리하기 위해서는 0으로 discardingThreshold을 설정합니다
+        <discardingThreshold>0</discardingThreshold>
+
+        큐의 최대 용량. 기본적으로 QUEUESIZE는 256으로 설정됩니다.
+        <queueSize>10000</queueSize>
+
+        해당 로그 이벤트 정보를 Queue에 추가하는 시점에 로그를 호출한 정보 (callerData)를 추출할지 여부를 결정하는 속성
+        <includeCallerData>boolean</includeCallerData>
+
+        (밀리 초) 큐의 최대 flush timeout 시간을 지정합니다.처리 할 수​​없는 이벤트가 삭제됩니다.
+        <maxFlushTime>int</maxFlushTime>
+
+        <appender-ref ref="dailyRollingFileAppender" />
+        <appender-ref ref="DB" />
+    </appender>
+    -->
+
+    <!-- FILE Appender -->
+    <!--
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH_NAME}</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH_NAME}.%d{yyyyMMdd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5p] [%F]%M\(%L\) : %m%n</pattern>
+        </encoder>
+    </appender>
+    -->
+    <!--<logger name="org.springframework" level="INFO" />-->
+    <!--<logger name="org.sopt.ssgsag.mapper" level="TRACE" />-->
+    <!--<logger name="org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor" level="DEBUG" />-->
+    <!--<logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" level="WARN" />-->
+
+    <root level="WARN">
+        <appender-ref ref="STDOUT" />
+        <!--<appender-ref ref="dailyRollingFileAppender" />-->
+        <appender-ref ref="DB" />
+        <!--<appender-ref ref="DB_ERR" />-->
+        <!--<appender-ref ref="FILE" />-->
+    </root>
+
+</configuration>

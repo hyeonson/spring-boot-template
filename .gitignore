@@ -1,4 +1,5 @@
 .gradle
+application.properties
 /build/
 
 # Ignore Gradle GUI config
